@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - Karbon Ayak İzi</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 80px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        .auth-container h1 {
+            text-align: center;
+            color: #0f766e;
+            margin-bottom: 30px;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .auth-form input {
+            padding: 14px 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+        .auth-form input:focus {
+            outline: none;
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+        .auth-btn {
+            padding: 16px;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        .auth-link a {
+            color: #14b8a6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h1>🌱 Kayıt Ol</h1>
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+        <form class="auth-form" id="registerForm">
+            <input type="text" id="username" placeholder="Kullanıcı adı" required minlength="3">
+            <input type="email" id="email" placeholder="E-posta" required>
+            <input type="password" id="password" placeholder="Şifre" required minlength="6">
+            <input type="password" id="confirmPassword" placeholder="Şifre Tekrar" required>
+            <button type="submit" class="auth-btn">Kayıt Ol</button>
+        </form>
+        <div class="auth-link">
+            Zaten hesabınız var mı? <a href="login.html">Giriş yapın</a>
+        </div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Şifreler eşleşmiyor!';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await authAPI.register({ username, email, password });
+                
+                if (response.success) {
+                    successDiv.textContent = 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...';
+                    successDiv.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    throw new Error(response.error || 'Kayıt başarısız');
+                }
+            } catch (error) {
+                errorDiv.textContent = error.message || 'Kayıt yapılırken bir hata oluştu';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+

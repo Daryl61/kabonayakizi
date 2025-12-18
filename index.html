@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Günlük Karbon İzi Hesaplayıcı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-link">
+                <img src="logo1.png.ico" alt="Karbon Ayak İzi Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span class="logo-fallback" style="display:none;">🌱</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">🌱 Karbon Ayak İzi Hesapla</a>
+                <a href="statistics.html" class="nav-link">📊 İstatistik</a>
+                <a href="#" id="logoutBtn" class="nav-link" onclick="authAPI.logout(); window.location.href='login.html';">Çıkış Yap</a>
+            </div>
+            <div class="datetime-display" id="datetimeDisplay"></div>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>🌱 Günlük Karbon İzi Hesaplayıcı</h1>
+            <p>Günlük aktivitelerinizin çevreye olan etkisini öğrenin</p>
+        </header>
+
+        <main>
+            <form id="carbonForm">
+                <section class="form-section">
+                    <h2>🚗 Ulaşım</h2>
+                    <div class="form-group">
+                        <label for="carKm">Araba ile gidilen mesafe (km):</label>
+                        <input type="number" id="carKm" min="0" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="busKm">Otobüs ile gidilen mesafe (km):</label>
+                        <input type="number" id="busKm" min="0" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="trainKm">Tren ile gidilen mesafe (km):</label>
+                        <input type="number" id="trainKm" min="0" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="planeKm">Uçak ile gidilen mesafe (km):</label>
+                        <input type="number" id="planeKm" min="0" step="0.1" value="0">
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>⚡ Enerji Kullanımı</h2>
+                    <div class="form-group">
+                        <label for="electricity">Elektrik kullanım süresi (saat):</label>
+                        <input type="number" id="electricity" min="0" step="0.5" value="0" placeholder="Örn: 8 saat">
+                        <small class="form-hint">Günlük elektrik kullanım süreniz (ışık, cihazlar vb.)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="gas">Doğalgaz kullanım süresi (saat):</label>
+                        <input type="number" id="gas" min="0" step="0.5" value="0" placeholder="Örn: 6 saat">
+                        <small class="form-hint">Günlük doğalgaz kullanım süreniz (ısınma, sıcak su vb.)</small>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>🍽️ Beslenme</h2>
+                    <div class="form-group">
+                        <label for="meatMeals">Et içeren öğün sayısı:</label>
+                        <input type="number" id="meatMeals" min="0" max="10" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="vegetarianMeals">Vejetaryen öğün sayısı:</label>
+                        <input type="number" id="vegetarianMeals" min="0" max="10" value="0">
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>🛒 Tüketim</h2>
+                    <div class="form-group">
+                        <label for="shopping">Alışveriş harcaması (TL):</label>
+                        <input type="number" id="shopping" min="0" step="0.01" value="0">
+                    </div>
+                </section>
+
+                <button type="submit" class="calculate-btn">Karbon İzini Hesapla</button>
+            </form>
+
+            <div id="results" class="results hidden">
+                <h2>📊 Sonuçlar</h2>
+                <div class="result-card">
+                    <div class="result-item">
+                        <span class="result-label">Toplam Karbon İzi:</span>
+                        <span class="result-value" id="totalCarbon">0</span>
+                        <span class="result-unit">kg CO₂</span>
+                    </div>
+                    <div class="carbon-bar">
+                        <div class="carbon-fill" id="carbonBar"></div>
+                    </div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Detaylı Dağılım</h3>
+                    <div class="breakdown-item">
+                        <span>🚗 Ulaşım:</span>
+                        <span id="transportCarbon">0 kg CO₂</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>⚡ Enerji:</span>
+                        <span id="energyCarbon">0 kg CO₂</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>🍽️ Beslenme:</span>
+                        <span id="foodCarbon">0 kg CO₂</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>🛒 Tüketim:</span>
+                        <span id="shoppingCarbon">0 kg CO₂</span>
+                    </div>
+                </div>
+
+                <div class="comparison">
+                    <h3>Karşılaştırma</h3>
+                    <p class="comparison-text" id="comparisonText"></p>
+                </div>
+
+                <div class="ai-recommendations" id="aiRecommendations">
+                    <h3>🤖 AI Tavsiyeleri</h3>
+                    <div class="loading-recommendations" id="loadingRecommendations">
+                        <p>CO₂ azaltma tavsiyeleri hazırlanıyor...</p>
+                    </div>
+                    <div class="recommendations-content hidden" id="recommendationsContent">
+                        <p id="aiAdviceText"></p>
+                    </div>
+                </div>
+
+                <button class="reset-btn" onclick="resetForm()">Yeniden Hesapla</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>💡 İpucu: Karbon izinizi azaltmak için toplu taşıma kullanın, enerji tasarrufu yapın ve daha az et tüketin.</p>
+        </footer>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+

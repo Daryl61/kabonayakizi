@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karbon İzi İstatistikleri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-link">
+                <img src="logo1.png.ico" alt="Karbon Ayak İzi Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span class="logo-fallback" style="display:none;">🌱</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">🌱 Karbon Ayak İzi Hesapla</a>
+                <a href="statistics.html" class="nav-link active">📊 İstatistik</a>
+            </div>
+            <div class="datetime-display" id="datetimeDisplay"></div>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>📊 Karbon İzi İstatistikleri</h1>
+            <p>Günlük karbon izi verilerinizi görüntüleyin</p>
+        </header>
+
+        <main>
+            <div id="noData" class="no-data hidden">
+                <p>Henüz kayıtlı veri bulunmamaktadır.</p>
+                <p>Karbon izinizi hesaplamak için <a href="index.html">ana sayfaya</a> gidin.</p>
+            </div>
+
+            <div id="statisticsContent" class="statistics-content">
+                <div class="calendar-container">
+                    <h2>15 Günlük Takvim</h2>
+                    <div id="calendarGrid" class="calendar-grid"></div>
+                </div>
+
+                <!-- Gün Detay Bölümü -->
+                <div id="dayDetailSection" class="day-detail-section hidden">
+                    <h3 id="detailDayTitle">Gün Detayları</h3>
+                    <div id="dayDetailContent"></div>
+                </div>
+
+                <div class="total-carbon-card">
+                    <h2>Toplam Karbon Ayak İzi</h2>
+                    <div class="total-value">
+                        <span id="totalCarbonFootprint">0</span>
+                        <span class="unit">kg CO₂</span>
+                    </div>
+                    <p class="total-info">Kayıtlı tüm günlerin toplamı</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>💡 İpucu: Düzenli olarak karbon izinizi hesaplayarak çevreye olan etkinizi takip edin.</p>
+        </footer>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="statistics.js"></script>
+</body>
+</html>
+

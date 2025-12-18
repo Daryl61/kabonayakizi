@@ -1,0 +1,84 @@
+// gRPC Service Definition - Communication Layer
+syntax = "proto3";
+
+package carbonfootprint;
+
+// Karbon Hesaplama Servisi
+service CarbonFootprintService {
+    // Karbon izi hesapla
+    rpc CalculateCarbon (CarbonRequest) returns (CarbonResponse);
+    
+    // Kullanıcının toplam karbon izini getir
+    rpc GetTotalCarbon (TotalCarbonRequest) returns (TotalCarbonResponse);
+    
+    // Kategorilere göre dağılım getir
+    rpc GetBreakdown (BreakdownRequest) returns (BreakdownResponse);
+}
+
+// İstek mesajları
+message CarbonRequest {
+    int32 user_id = 1;
+    TransportData transport = 2;
+    EnergyData energy = 3;
+    FoodData food = 4;
+    ShoppingData shopping = 5;
+}
+
+message TransportData {
+    double car_km = 1;
+    double bus_km = 2;
+    double train_km = 3;
+    double plane_km = 4;
+}
+
+message EnergyData {
+    double electricity_hours = 1;
+    double gas_hours = 2;
+}
+
+message FoodData {
+    int32 meat_meals = 1;
+    int32 vegetarian_meals = 2;
+}
+
+message ShoppingData {
+    double amount = 1;
+}
+
+message TotalCarbonRequest {
+    int32 user_id = 1;
+    string start_date = 2;
+    string end_date = 3;
+}
+
+message BreakdownRequest {
+    int32 user_id = 1;
+    string start_date = 2;
+    string end_date = 3;
+}
+
+// Yanıt mesajları
+message CarbonResponse {
+    double total = 1;
+    double transport = 2;
+    double energy = 3;
+    double food = 4;
+    double shopping = 5;
+    int32 record_id = 6;
+    string message = 7;
+}
+
+message TotalCarbonResponse {
+    double total_carbon = 1;
+    string message = 2;
+}
+
+message BreakdownResponse {
+    double total_transport = 1;
+    double total_energy = 2;
+    double total_food = 3;
+    double total_shopping = 4;
+    double grand_total = 5;
+    string message = 6;
+}
+
